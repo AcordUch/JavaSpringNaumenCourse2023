@@ -1,4 +1,4 @@
-package com.acord.dealweb;
+package com.acord.dealweb.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

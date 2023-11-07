@@ -13,13 +13,14 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-    private String username;
-    private String firstName;
-    private String surname;
-    private String login;
-    private String password;
-    private Role role;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private String id;
+
+  private String username;
+  private String firstName;
+  private String surname;
+  private String login;
+  private String password;
+  private Role role;
 }

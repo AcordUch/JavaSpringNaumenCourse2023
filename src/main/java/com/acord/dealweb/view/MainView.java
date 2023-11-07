@@ -6,7 +6,7 @@ import com.vaadin.flow.router.Route;
 
 @Route("/hi") // map view to the root
 class MainView extends VerticalLayout {
-    MainView() {
-        add(new H1("Hello, world"));
-    }
+  MainView() {
+    add(new H1("Hello, world"));
+  }
 }

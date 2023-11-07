@@ -18,52 +18,40 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig {
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((authz) ->
-                        authz
-                                .requestMatchers(
-                                        AntPathRequestMatcher.antMatcher("/swagger-ui/**"),
-                                        AntPathRequestMatcher.antMatcher("/v3/api-docs/**"),
-                                        AntPathRequestMatcher.antMatcher("/api/v1/rooms")
-                                ).hasRole("ADMIN")
-                                .requestMatchers(
-                                        AntPathRequestMatcher.antMatcher("/api/**")
-                                ).authenticated()
-                                .requestMatchers(
-                                        AntPathRequestMatcher.antMatcher("/registration"),
-                                        AntPathRequestMatcher.antMatcher("/login"),
-                                        AntPathRequestMatcher.antMatcher("/logout"),
-                                        AntPathRequestMatcher.antMatcher("/ui/**")
-                                ).permitAll()
-                                .requestMatchers(
-                                        AntPathRequestMatcher.antMatcher("/**")
-                                ).hasRole("ADMIN")
-                )
-                .formLogin(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable);
-        return http.build();
-    }
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.authorizeHttpRequests(
+            (authorize) ->
+                authorize
+                    .requestMatchers(
+                        AntPathRequestMatcher.antMatcher("/swagger-ui/**"),
+                        AntPathRequestMatcher.antMatcher("/v3/api-docs/**"),
+                        AntPathRequestMatcher.antMatcher("/api/v1/rooms"))
+                    .hasRole("ADMIN")
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/**"))
+                    .authenticated()
+                    .requestMatchers(
+                        AntPathRequestMatcher.antMatcher("/registration"),
+                        AntPathRequestMatcher.antMatcher("/login"),
+                        AntPathRequestMatcher.antMatcher("/logout"),
+                        AntPathRequestMatcher.antMatcher("/ui/**"))
+                    .permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
+                    .hasRole("ADMIN"))
+        .formLogin(Customizer.withDefaults())
+        .csrf(AbstractHttpConfigurer::disable);
+    return http.build();
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return NoOpPasswordEncoder.getInstance();
+  }
 
-    @Bean
-    public UserDetailsService getUsers() {
-        UserDetails user = User.builder()
-                .username("user")
-                .password("user")
-                .roles("USER")
-                .build();
-
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password("admin")
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
-    }
+  @Bean
+  public UserDetailsService getUsers() {
+    UserDetails user = User.builder().username("user").password("user").roles("USER").build();
+    UserDetails admin = User.builder().username("admin").password("admin").roles("ADMIN").build();
+    return new InMemoryUserDetailsManager(user, admin);
+  }
 }

@@ -6,12 +6,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -32,9 +28,11 @@ public class SpringSecurityConfig {
                     .authenticated()
                     .requestMatchers(
                         AntPathRequestMatcher.antMatcher("/registration"),
+                        AntPathRequestMatcher.antMatcher("/signup"),
                         AntPathRequestMatcher.antMatcher("/login"),
                         AntPathRequestMatcher.antMatcher("/logout"),
-                        AntPathRequestMatcher.antMatcher("/ui/**"))
+                        AntPathRequestMatcher.antMatcher("/ui/**"),
+                        AntPathRequestMatcher.antMatcher("/"))
                     .permitAll()
                     .requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
                     .hasRole("ADMIN"))
@@ -48,10 +46,12 @@ public class SpringSecurityConfig {
     return NoOpPasswordEncoder.getInstance();
   }
 
-  @Bean
-  public UserDetailsService getUsers() {
-    UserDetails user = User.builder().username("user").password("user").roles("USER").build();
-    UserDetails admin = User.builder().username("admin").password("admin").roles("ADMIN").build();
-    return new InMemoryUserDetailsManager(user, admin);
-  }
+  //  @Bean
+  //  public UserDetailsService getUsers() {
+  //    System.out.println("hi1");
+  //    UserDetails user = User.builder().username("user").password("user").roles("USER").build();
+  //    UserDetails admin =
+  // User.builder().username("admin").password("admin").roles("ADMIN").build();
+  //    return new InMemoryUserDetailsManager(user, admin);
+  //  }
 }

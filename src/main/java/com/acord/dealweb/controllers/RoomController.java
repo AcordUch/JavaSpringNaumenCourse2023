@@ -19,7 +19,7 @@ public class RoomController {
 
   @PostMapping("/api/v1/rooms")
   public ResponseEntity<?> add(@RequestBody Room room) {
-    roomService.add(room);
+    roomService.addOrUpdate(room);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
@@ -35,9 +35,9 @@ public class RoomController {
     return new ResponseEntity<>(roomService.getOne(id), HttpStatus.OK);
   }
 
-  @PutMapping("/api/v1/rooms/{id}")
-  public ResponseEntity<?> update(@PathVariable String id, @RequestBody Room room) {
-    roomService.update(id, room);
+  @PutMapping("/api/v1/rooms")
+  public ResponseEntity<?> update(@RequestBody Room room) {
+    roomService.addOrUpdate(room);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 

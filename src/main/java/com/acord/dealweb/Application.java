@@ -1,16 +1,20 @@
 package com.acord.dealweb;
 
+import com.vaadin.flow.spring.SpringBootAutoConfiguration;
+import com.vaadin.flow.spring.VaadinServletConfiguration;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
 
-@SpringBootApplication(exclude = {/*DataSourceAutoConfiguration.class,*/ SecurityAutoConfiguration.class})
+@SpringBootApplication(exclude = {/*DataSourceAutoConfiguration.class,*/ /*SecurityAutoConfiguration.class*/ /*SpringBootAutoConfiguration.class*/})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

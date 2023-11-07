@@ -14,8 +14,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Card {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String uuid;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
     private String name;
     private CardType type;
 }

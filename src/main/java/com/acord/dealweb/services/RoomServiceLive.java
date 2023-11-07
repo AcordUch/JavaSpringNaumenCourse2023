@@ -25,7 +25,10 @@ public class RoomServiceLive implements RoomService {
 
     @Override
     public List<Room> getAll() {
-        return null;
+        return List.of(
+                Room.builder().name("11").uuid("1").build(),
+                Room.builder().name("kek").uuid("2").build()
+        );
     }
 
     @Override

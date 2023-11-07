@@ -7,16 +7,17 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "users")
+@Table(name = "web_users")
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String uuid;
-    private String name;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+    private String username;
+    private String firstName;
     private String surname;
     private String login;
     private String password;

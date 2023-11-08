@@ -26,4 +26,12 @@ public class Room {
   //    @ElementCollection(targetClass = Card.class, fetch = FetchType.EAGER)
   @CollectionTable(name = "room_cards", joinColumns = @JoinColumn(name = "room_id"))
   private List<Card> cardsInRoom = new ArrayList<>();
+
+  public void addCard(Card card) {
+    cardsInRoom.add(card);
+  }
+
+  public void deleteCard(Card card) {
+    cardsInRoom.remove(card);
+  }
 }

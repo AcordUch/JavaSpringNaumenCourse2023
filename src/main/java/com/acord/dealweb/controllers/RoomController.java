@@ -1,6 +1,7 @@
 package com.acord.dealweb.controllers;
 
 import com.acord.dealweb.domain.Room;
+import com.acord.dealweb.domain.card.Card;
 import com.acord.dealweb.services.RoomService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,25 @@ public class RoomController {
   @DeleteMapping("api/v1/rooms/{id}")
   public ResponseEntity<?> delete(@PathVariable String id) {
     roomService.delete(id);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @PostMapping("/api/v1/rooms/{id}/card")
+  public ResponseEntity<?> addCardToRoom(@PathVariable String id, @RequestBody Card card) {
+    roomService.addCardToRoom(id, card);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @PostMapping("/api/v1/rooms/{roomId}/card/{cardId}")
+  public ResponseEntity<?> addExistRoomToUser(
+      @PathVariable String roomId, @PathVariable String cardId) {
+    roomService.addExistCardToRoom(roomId, cardId);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @DeleteMapping("/api/v1/rooms/{id}/card")
+  public ResponseEntity<?> deleteCardFromRoom(@PathVariable String id, @RequestBody Card card) {
+    roomService.deleteCardFromRoom(id, card);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }

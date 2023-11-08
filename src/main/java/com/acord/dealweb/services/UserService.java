@@ -1,8 +1,10 @@
 package com.acord.dealweb.services;
 
 import com.acord.dealweb.domain.Role;
+import com.acord.dealweb.domain.Room;
 import com.acord.dealweb.domain.WebUser;
 import com.acord.dealweb.domain.exception.AlreadyRegisteredException;
+import com.acord.dealweb.repositories.RoomRepository;
 import com.acord.dealweb.repositories.UserRepository;
 import java.util.List;
 import java.util.Set;
@@ -19,10 +21,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
+  private final RoomRepository roomRepository;
 
   @Autowired
-  public UserService(UserRepository userRepository) {
+  public UserService(UserRepository userRepository, RoomRepository roomRepository) {
     this.userRepository = userRepository;
+    this.roomRepository = roomRepository;
   }
 
   @Override
@@ -50,5 +54,28 @@ public class UserService implements UserDetailsService {
     }
     user.setRole(Role.USER);
     userRepository.save(user);
+  }
+
+  public void update(WebUser user) { // TODO: add check on exist
+    userRepository.save(user);
+  }
+
+  public void addRoomToUser(String username, Room room) {
+    WebUser webUser = userRepository.findByUsername(username);
+    webUser.addRoomToUser(room);
+    update(webUser);
+  }
+
+  public void addExistRoomToUser(String username, String roomId) {
+    WebUser webUser = userRepository.findByUsername(username);
+    Room room = roomRepository.getReferenceById(roomId);
+    webUser.addRoomToUser(room);
+    update(webUser);
+  }
+
+  public void deleteRoomFromUser(String username, Room room) { // TODO: rework
+    WebUser webUser = userRepository.findByUsername(username);
+    webUser.deleteRoomFromUser(room);
+    update(webUser);
   }
 }

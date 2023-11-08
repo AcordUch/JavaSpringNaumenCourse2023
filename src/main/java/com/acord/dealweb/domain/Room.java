@@ -1,6 +1,7 @@
 package com.acord.dealweb.domain;
 
 import com.acord.dealweb.domain.card.Card;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Room {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -22,9 +24,15 @@ public class Room {
   private String name;
   private String password;
 
-  @OneToMany
-  //    @JoinColumn(name = "UUID")
-  //    @ElementCollection(targetClass = Card.class, fetch = FetchType.EAGER)
+  @OneToMany(fetch=FetchType.EAGER)
   @CollectionTable(name = "room_cards", joinColumns = @JoinColumn(name = "room_id"))
   private List<Card> cardsInRoom = new ArrayList<>();
+
+  public void addCardToRoom(Card card) {
+    cardsInRoom.add(card);
+  }
+
+  public void deleteCardFromRoom(Card card) {
+    cardsInRoom.remove(card);
+  }
 }

@@ -1,5 +1,6 @@
 package com.acord.dealweb.services;
 
+import com.acord.dealweb.domain.Card;
 import com.acord.dealweb.domain.Room;
 import com.acord.dealweb.repositories.RoomRepository;
 import java.util.HashMap;
@@ -20,6 +21,20 @@ public class RoomServiceLive implements RoomService {
   @Override
   public void addOrUpdate(Room room) {
     roomRepository.save(room);
+  }
+
+  @Override
+  public void addCardToRoom(String roomId, Card card) {
+    Room room = roomRepository.getReferenceById(roomId);
+    room.addCardToRoom(card);
+    addOrUpdate(room);
+  }
+
+  @Override
+  public void deleteCardFromRoom(String roomId, Card card) {
+    Room room = roomRepository.getReferenceById(roomId);
+    room.deleteCardFromRoom(card);
+    addOrUpdate(room);
   }
 
   @Override

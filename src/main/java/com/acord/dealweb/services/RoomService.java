@@ -1,10 +1,15 @@
 package com.acord.dealweb.services;
 
+import com.acord.dealweb.domain.Card;
 import com.acord.dealweb.domain.Room;
 import java.util.List;
 
 public interface RoomService {
   void addOrUpdate(Room room);
+
+  void addCardToRoom(String roomId, Card card);
+
+  void deleteCardFromRoom(String roomId, Card card);
 
   Room getOne(String id);
 

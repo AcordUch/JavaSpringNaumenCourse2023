@@ -27,11 +27,11 @@ public class Room {
   @CollectionTable(name = "room_cards", joinColumns = @JoinColumn(name = "room_id"))
   private List<Card> cardsInRoom = new ArrayList<>();
 
-  public void addCard(Card card) {
+  public void addCardToRoom(Card card) {
     cardsInRoom.add(card);
   }
 
-  public void deleteCard(Card card) {
+  public void deleteCardFromRoom(Card card) {
     cardsInRoom.remove(card);
   }
 }

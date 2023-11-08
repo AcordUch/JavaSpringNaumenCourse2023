@@ -90,3 +90,6 @@ mvnw
 tsconfig.json
 types.d.ts
 index.html
+
+#env
+*env.properties*

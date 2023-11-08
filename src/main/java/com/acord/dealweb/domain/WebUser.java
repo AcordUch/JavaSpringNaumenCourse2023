@@ -12,10 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class WebUser {
-  //  @Id
-  //  @GeneratedValue(strategy = GenerationType.UUID)
-  //  private String id;
-
   @Id private String username;
   private String password;
   private String firstName;

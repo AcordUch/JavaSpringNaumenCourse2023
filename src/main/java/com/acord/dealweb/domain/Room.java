@@ -1,5 +1,6 @@
 package com.acord.dealweb.domain;
 
+import com.acord.dealweb.domain.card.Card;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

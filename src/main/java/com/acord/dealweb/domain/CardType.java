@@ -1,3 +1,5 @@
 package com.acord.dealweb.domain;
 
-public enum CardType {}
+public enum CardType {
+    Accumulate
+}

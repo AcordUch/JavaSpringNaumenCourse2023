@@ -17,5 +17,7 @@ public interface RoomService {
 
   List<Room> getAll();
 
+  List<Room> getAll(String filterText);
+
   void delete(String id);
 }

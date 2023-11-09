@@ -64,6 +64,15 @@ public class RoomServiceLive implements RoomService {
   }
 
   @Override
+  public List<Room> getAll(String stringFilter) {
+    if (stringFilter == null || stringFilter.isEmpty()) {
+      return roomRepository.findAll();
+    } else {
+      return roomRepository.search(stringFilter);
+    }
+  }
+
+  @Override
   public void delete(String id) {
     roomRepository.deleteById(id);
   }

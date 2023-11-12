@@ -11,18 +11,17 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.shared.Registration;
 import lombok.Getter;
 
 public class RoomForm extends FormLayout {
-  private TextField name = new TextField("Name");
-  private PasswordField password = new PasswordField("Password");
+  private final TextField name = new TextField("Name");
+  private final PasswordField password = new PasswordField("Password");
 
-  private Button save = new Button("Save");
-  private Button delete = new Button("Delete");
-  private Button close = new Button("Cancel");
+  private final Button save = new Button("Save");
+  private final Button delete = new Button("Delete");
+  private final Button close = new Button("Cancel");
 
-  private BeanValidationBinder<Room> binder = new BeanValidationBinder<>(Room.class);
+  private final BeanValidationBinder<Room> binder = new BeanValidationBinder<>(Room.class);
 
   public RoomForm() {
     binder.bindInstanceFields(this);
@@ -84,15 +83,15 @@ public class RoomForm extends FormLayout {
     }
   }
 
-  public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
-    return addListener(SaveEvent.class, listener);
+  public void addSaveListener(ComponentEventListener<SaveEvent> listener) {
+    addListener(SaveEvent.class, listener);
   }
 
-  public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
-    return addListener(DeleteEvent.class, listener);
+  public void addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
+    addListener(DeleteEvent.class, listener);
   }
 
-  public Registration addCloseListener(ComponentEventListener<CloseEvent> listener) {
-    return addListener(CloseEvent.class, listener);
+  public void addCloseListener(ComponentEventListener<CloseEvent> listener) {
+    addListener(CloseEvent.class, listener);
   }
 }

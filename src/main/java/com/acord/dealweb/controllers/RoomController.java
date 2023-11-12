@@ -24,10 +24,10 @@ public class RoomController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @GetMapping("/api/v1/rooms")
+  @GetMapping("/api/v1/rooms?filterText={filterText}")
   @ResponseBody
-  public ResponseEntity<List<Room>> getAll() {
-    return new ResponseEntity<>(roomService.getAll(), HttpStatus.OK);
+  public ResponseEntity<List<Room>> getAll(@PathVariable String filterText) {
+    return new ResponseEntity<>(roomService.getAll(filterText), HttpStatus.OK);
   }
 
   @GetMapping(value = "/api/v1/rooms/{id}")

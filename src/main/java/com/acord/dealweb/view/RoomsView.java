@@ -1,8 +1,8 @@
 package com.acord.dealweb.view;
 
 import com.acord.dealweb.controllers.RoomController;
+import com.acord.dealweb.controllers.UserController;
 import com.acord.dealweb.domain.Room;
-import com.acord.dealweb.services.RoomService;
 import com.acord.dealweb.view.form.RoomForm;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -14,25 +14,28 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
+import lombok.val;
 
 @PermitAll
 @Route(value = "", layout = MainLayout.class)
 @PageTitle("Rooms")
 public class RoomsView extends VerticalLayout {
-  private Grid<Room> grid = new Grid<>(Room.class);
-  private TextField filterText = new TextField();
-  private RoomForm form;
-  private RoomController controller;
-  private RoomService service;
+  private final Grid<Room> grid = new Grid<>(Room.class);
+  private final TextField filterText = new TextField();
+  private final RoomForm form;
+  private final RoomController roomController;
+  private final UserController userController;
 
-  public RoomsView(RoomController controller, RoomService service) {
-    this.controller = controller;
-    this.service = service;
+  public RoomsView(RoomController roomController, UserController userController) {
+    this.roomController = roomController;
+    this.userController = userController;
     setSizeFull();
     configureGrid();
+
+    this.form = new RoomForm();
     configureForm();
 
-    add(getToolbar(), getContent());
+    add(makeToolbar(), makeContent());
     updateGrid();
     closeEditor();
   }
@@ -44,7 +47,7 @@ public class RoomsView extends VerticalLayout {
     grid.asSingleSelect().addValueChangeListener(event -> editRoom(event.getValue()));
   }
 
-  private HorizontalLayout getToolbar() {
+  private HorizontalLayout makeToolbar() {
     filterText.setPlaceholder("Filter by name...");
     filterText.setClearButtonVisible(true);
     filterText.setValueChangeMode(ValueChangeMode.LAZY);
@@ -56,7 +59,7 @@ public class RoomsView extends VerticalLayout {
     return new HorizontalLayout(filterText, addRoomButton);
   }
 
-  private Component getContent() {
+  private Component makeContent() {
     HorizontalLayout content = new HorizontalLayout(grid, form);
     content.setFlexGrow(2, grid);
     content.setFlexGrow(1, form);
@@ -65,7 +68,6 @@ public class RoomsView extends VerticalLayout {
   }
 
   private void configureForm() {
-    form = new RoomForm();
     form.setWidth("25em");
     form.addSaveListener(this::saveRoom);
     form.addDeleteListener(this::deleteRoom);
@@ -73,13 +75,15 @@ public class RoomsView extends VerticalLayout {
   }
 
   private void saveRoom(RoomForm.SaveEvent event) {
-    controller.add(event.getRoom());
+    val room = event.getRoom();
+    roomController.add(room);
+    userController.addExistRoomToUser(null, room.getUuid());
     updateGrid();
     closeEditor();
   }
 
   private void deleteRoom(RoomForm.DeleteEvent event) {
-    controller.delete(event.getRoom().getUuid());
+    roomController.delete(event.getRoom().getUuid());
     updateGrid();
     closeEditor();
   }
@@ -104,6 +108,6 @@ public class RoomsView extends VerticalLayout {
   }
 
   private void updateGrid() {
-    grid.setItems(service.getAll(filterText.getValue()));
+    grid.setItems(userController.getUserRooms(null, filterText.getValue()).getBody());
   }
 }

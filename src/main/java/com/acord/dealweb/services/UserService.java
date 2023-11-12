@@ -78,4 +78,12 @@ public class UserService implements UserDetailsService {
     webUser.deleteRoomFromUser(room);
     update(webUser);
   }
+
+  public List<Room> getUserRooms(String username, String filter) {
+    if (filter == null || filter.isEmpty()) {
+      return userRepository.getRoomsByUsername(username);
+    } else {
+      return userRepository.getRoomsByUsername(username, filter);
+    }
+  }
 }

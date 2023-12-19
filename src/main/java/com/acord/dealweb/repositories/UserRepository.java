@@ -17,4 +17,13 @@ public interface UserRepository extends JpaRepository<WebUser, String> {
 
   @Query("select ur from WebUser u join u.userRooms ur where u.username=:username")
   List<Room> getRoomsByUsername(String username);
+
+  @Query(
+      "select ufr from WebUser u"
+          + " join u.friends ufr"
+          + " where u.username=:username and lower(ufr.username) like lower(concat('%', :searchTerm, '%'))")
+  List<WebUser> getFriendsByUsername(String username, String searchTerm);
+
+  @Query("select ufr from WebUser u join u.friends ufr where u.username=:username")
+  List<WebUser> getFriendsByUsername(String username);
 }

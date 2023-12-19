@@ -41,6 +41,10 @@ public class UserService implements UserDetailsService {
         mapRolesToAuthority(Set.of(webUser.getRole())));
   }
 
+  public WebUser getUserByUsername(String username) {
+    return userRepository.findByUsername(username);
+  }
+
   private List<? extends GrantedAuthority> mapRolesToAuthority(Set<Role> roles) {
     return roles.stream()
         .map(r -> new SimpleGrantedAuthority("ROLE_" + r.name()))
@@ -84,6 +88,14 @@ public class UserService implements UserDetailsService {
       return userRepository.getRoomsByUsername(username);
     } else {
       return userRepository.getRoomsByUsername(username, filter);
+    }
+  }
+
+  public List<WebUser> getUserFriends(String username, String filter) {
+    if (filter == null || filter.isEmpty()) {
+      return userRepository.getFriendsByUsername(username);
+    } else {
+      return userRepository.getFriendsByUsername(username, filter);
     }
   }
 }

@@ -27,7 +27,8 @@ public class SpringSecurityConfig extends VaadinWebSecurity {
                     .hasRole("ADMIN")
                     .requestMatchers(
                         AntPathRequestMatcher.antMatcher("/api/**"),
-                        AntPathRequestMatcher.antMatcher("/ui"))
+                        AntPathRequestMatcher.antMatcher("/ui"),
+                        AntPathRequestMatcher.antMatcher("/ui/friends"))
                     .authenticated()
                     .requestMatchers(
                         AntPathRequestMatcher.antMatcher("/registration"),
@@ -49,14 +50,4 @@ public class SpringSecurityConfig extends VaadinWebSecurity {
   public PasswordEncoder passwordEncoder() {
     return NoOpPasswordEncoder.getInstance();
   }
-
-  // @Bean
-  // public UserDetailsService getUsers() {
-  // System.out.println("hi1");
-  // UserDetails user =
-  // User.builder().username("user").password("user").roles("USER").build();
-  // UserDetails admin =
-  // User.builder().username("admin").password("admin").roles("ADMIN").build();
-  // return new InMemoryUserDetailsManager(user, admin);
-  // }
 }

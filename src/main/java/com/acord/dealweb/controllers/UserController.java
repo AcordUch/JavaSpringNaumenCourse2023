@@ -1,9 +1,11 @@
 package com.acord.dealweb.controllers;
 
 import com.acord.dealweb.domain.Room;
+import com.acord.dealweb.domain.WebUser;
 import com.acord.dealweb.services.UserService;
 import jakarta.annotation.Nullable;
 import java.util.List;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,5 +62,47 @@ public class UserController {
     }
     List<Room> rooms = userService.getUserRooms(username, filterText);
     return new ResponseEntity<>(rooms, HttpStatus.OK);
+  }
+
+  @GetMapping("/api/v1/users/friends?username={username}&filterText={filterText}")
+  public ResponseEntity<List<WebUser>> getUserFriends(
+      @PathVariable @Nullable String filterText, @PathVariable @Nullable String username) {
+    if (username == null) {
+      username = SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+    val friends = userService.getUserFriends(username, filterText);
+    return new ResponseEntity<>(friends, HttpStatus.OK);
+  }
+
+  @PostMapping("/api/v1/users/friends/{friendUsername}?username={username}")
+  public ResponseEntity<List<Room>> addFriendToUser(
+      @PathVariable String friendUsername, @PathVariable String username) {
+    if (username == null) {
+      username = SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+    val friend = userService.getUserByUsername(friendUsername);
+    val user = userService.getUserByUsername(username);
+    if (friend == null || user == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    user.addFriend(friend);
+    userService.update(user);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @DeleteMapping("/api/v1/users/friends/{friendUsername}?username={username}")
+  public ResponseEntity<List<WebUser>> removeFriendsFromUser(
+      @PathVariable String friendUsername, @PathVariable String username) {
+    if (username == null) {
+      username = SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+    val user = userService.getUserByUsername(username);
+    if (user == null) {
+      System.out.println("User not found");
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    user.deleteFriend(friendUsername);
+    userService.update(user);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }

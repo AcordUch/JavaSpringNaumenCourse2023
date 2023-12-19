@@ -34,6 +34,9 @@ public class MainLayout extends AppLayout {
   }
 
   private void createDrawer() {
-    addToDrawer(new VerticalLayout(new RouterLink("Rooms", RoomsView.class)));
+    addToDrawer(
+        new VerticalLayout(
+            new RouterLink("Rooms", RoomsView.class),
+            new RouterLink("Friends", FriendsView.class)));
   }
 }

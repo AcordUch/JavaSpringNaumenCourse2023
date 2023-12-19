@@ -22,9 +22,13 @@ public class WebUser {
   private String surname;
   private Role role;
 
-  @OneToMany(fetch=FetchType.EAGER)
+  @OneToMany(fetch = FetchType.EAGER)
   @CollectionTable(name = "user_rooms", joinColumns = @JoinColumn(name = "user_id"))
   private List<Room> userRooms = new ArrayList<>();
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  @CollectionTable(name = "user_friends", joinColumns = @JoinColumn(name = "user_id"))
+  private List<WebUser> friends = new ArrayList<>();
 
   public void addRoomToUser(Room room) {
     userRooms.add(room);
@@ -32,5 +36,13 @@ public class WebUser {
 
   public void deleteRoomFromUser(Room room) {
     userRooms.remove(room);
+  }
+
+  public void addFriend(WebUser friend) {
+    friends.add(friend);
+  }
+
+  public void deleteFriend(String friendUsername) {
+    friends.removeIf(fr -> fr.username.equals(friendUsername));
   }
 }

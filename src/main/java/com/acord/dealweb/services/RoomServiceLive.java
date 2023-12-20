@@ -33,9 +33,9 @@ public class RoomServiceLive implements RoomService {
 
   @Override
   public void addExistCardToRoom(String roomId, String cardId) {
-    Room room = roomRepository.getReferenceById(roomId);
+    Room room = roomRepository.findById(roomId).orElseGet(null);
     Card card = cardRepository.getReferenceById(cardId);
-    room.addCardToRoom(card);
+    room.addCardToRoom(card); // TODO: add check on null
     addOrUpdate(room);
   }
 
@@ -75,5 +75,14 @@ public class RoomServiceLive implements RoomService {
   @Override
   public void delete(String id) {
     roomRepository.deleteById(id);
+  }
+
+  @Override
+  public List<Card> getRoomCards(String roomId, String filterText) {
+    if (filterText == null || filterText.isEmpty()) {
+      return roomRepository.getCardsByRoomId(roomId);
+    } else {
+      return roomRepository.getCardsByRoomId(roomId, filterText);
+    }
   }
 }

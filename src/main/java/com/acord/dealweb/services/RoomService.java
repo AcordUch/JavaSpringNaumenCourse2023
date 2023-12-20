@@ -20,4 +20,6 @@ public interface RoomService {
   List<Room> getAll(String filterText);
 
   void delete(String id);
+
+  List<Card> getRoomCards(String roomId, String filterText);
 }

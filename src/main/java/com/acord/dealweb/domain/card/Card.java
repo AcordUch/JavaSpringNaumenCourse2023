@@ -23,7 +23,7 @@ public class Card {
   private String id;
 
   private String name;
-  private String Description;
+  private String description;
 
   @Column(nullable = false)
   private final CardType type = CardType.Accumulate;

@@ -54,7 +54,10 @@ public class FriendsView extends VerticalLayout {
     Button addRoomButton = new Button("Add friend");
     addRoomButton.addClickListener(click -> addFriend());
 
-    return new HorizontalLayout(filterText, addRoomButton);
+    Button reloadButton = new Button("Reload");
+    reloadButton.addClickListener(click -> updateGrid());
+
+    return new HorizontalLayout(filterText, addRoomButton, reloadButton);
   }
 
   private Component makeContent() {

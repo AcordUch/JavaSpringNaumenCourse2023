@@ -5,6 +5,7 @@ import com.acord.dealweb.controllers.UserController;
 import com.acord.dealweb.domain.Room;
 import com.acord.dealweb.view.form.RoomForm;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -56,7 +57,10 @@ public class RoomsView extends VerticalLayout {
     Button addRoomButton = new Button("Add room");
     addRoomButton.addClickListener(click -> addRoom());
 
-    return new HorizontalLayout(filterText, addRoomButton);
+    Button reloadButton = new Button("Reload");
+    reloadButton.addClickListener(click -> updateGrid());
+
+    return new HorizontalLayout(filterText, addRoomButton, reloadButton);
   }
 
   private Component makeContent() {
@@ -72,6 +76,7 @@ public class RoomsView extends VerticalLayout {
     form.addSaveListener(this::saveRoom);
     form.addDeleteListener(this::deleteRoom);
     form.addCloseListener(e -> closeEditor());
+    form.addOpenListener(e -> openRoomView(e.getRoom()));
   }
 
   private void saveRoom(RoomForm.SaveEvent event) {
@@ -109,5 +114,9 @@ public class RoomsView extends VerticalLayout {
 
   private void updateGrid() {
     grid.setItems(userController.getUserRooms(null, filterText.getValue()).getBody());
+  }
+
+  private void openRoomView(Room room) {
+    UI.getCurrent().navigate(String.format("/room/%s", room.getUuid()));
   }
 }

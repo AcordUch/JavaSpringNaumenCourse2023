@@ -8,6 +8,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -20,6 +21,7 @@ public class RoomForm extends FormLayout {
   private final Button save = new Button("Save");
   private final Button delete = new Button("Delete");
   private final Button close = new Button("Cancel");
+  private final Button open = new Button("Open");
 
   private final BeanValidationBinder<Room> binder = new BeanValidationBinder<>(Room.class);
 
@@ -32,10 +34,11 @@ public class RoomForm extends FormLayout {
     binder.setBean(room);
   }
 
-  private HorizontalLayout createButtonsLayout() {
+  private VerticalLayout createButtonsLayout() {
     save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
     close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+    open.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
     save.addClickShortcut(Key.ENTER);
     delete.addClickShortcut(Key.DELETE);
@@ -44,9 +47,10 @@ public class RoomForm extends FormLayout {
     save.addClickListener(event -> validateAndSave());
     delete.addClickListener(event -> fireEvent(new DeleteEvent(this, binder.getBean())));
     close.addClickListener(event -> fireEvent(new CloseEvent(this)));
+    open.addClickListener(event -> fireEvent(new OpenEvent(this, binder.getBean())));
 
     binder.addStatusChangeListener(event -> save.setEnabled(binder.isValid()));
-    return new HorizontalLayout(save, delete, close);
+    return new VerticalLayout(new HorizontalLayout(save, delete, close), open);
   }
 
   private void validateAndSave() {
@@ -83,6 +87,12 @@ public class RoomForm extends FormLayout {
     }
   }
 
+  public static class OpenEvent extends RoomFormEvent {
+    public OpenEvent(RoomForm source, Room room) {
+      super(source, room);
+    }
+  }
+
   public void addSaveListener(ComponentEventListener<SaveEvent> listener) {
     addListener(SaveEvent.class, listener);
   }
@@ -93,5 +103,9 @@ public class RoomForm extends FormLayout {
 
   public void addCloseListener(ComponentEventListener<CloseEvent> listener) {
     addListener(CloseEvent.class, listener);
+  }
+
+  public void addOpenListener(ComponentEventListener<OpenEvent> listener) {
+    addListener(OpenEvent.class, listener);
   }
 }

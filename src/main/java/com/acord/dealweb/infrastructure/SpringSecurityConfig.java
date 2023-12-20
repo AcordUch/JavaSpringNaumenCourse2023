@@ -28,7 +28,8 @@ public class SpringSecurityConfig extends VaadinWebSecurity {
                     .requestMatchers(
                         AntPathRequestMatcher.antMatcher("/api/**"),
                         AntPathRequestMatcher.antMatcher("/ui"),
-                        AntPathRequestMatcher.antMatcher("/ui/friends"))
+                        AntPathRequestMatcher.antMatcher("/ui/friends"),
+                        AntPathRequestMatcher.antMatcher("/ui/room"))
                     .authenticated()
                     .requestMatchers(
                         AntPathRequestMatcher.antMatcher("/registration"),

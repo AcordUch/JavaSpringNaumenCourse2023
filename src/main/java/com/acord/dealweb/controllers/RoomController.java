@@ -3,7 +3,10 @@ package com.acord.dealweb.controllers;
 import com.acord.dealweb.domain.Room;
 import com.acord.dealweb.domain.card.Card;
 import com.acord.dealweb.services.RoomService;
+import jakarta.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +35,8 @@ public class RoomController {
 
   @GetMapping(value = "/api/v1/rooms/{id}")
   @ResponseBody
-  public ResponseEntity<Room> getOne(@PathVariable String id) {
-    return new ResponseEntity<>(roomService.getOne(id), HttpStatus.OK);
+  public ResponseEntity<Optional<Room>> getOne(@PathVariable String id) {
+    return new ResponseEntity<>(Optional.ofNullable(roomService.getOne(id)), HttpStatus.OK);
   }
 
   @PutMapping("/api/v1/rooms")
@@ -44,7 +47,7 @@ public class RoomController {
 
   @DeleteMapping("api/v1/rooms/{id}")
   public ResponseEntity<?> delete(@PathVariable String id) {
-    roomService.delete(id);
+    roomService.delete(id); //TODO: it is wrong, remade
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
@@ -55,7 +58,7 @@ public class RoomController {
   }
 
   @PostMapping("/api/v1/rooms/{roomId}/card/{cardId}")
-  public ResponseEntity<?> addExistRoomToUser(
+  public ResponseEntity<?> addExistCardToRoom(
       @PathVariable String roomId, @PathVariable String cardId) {
     roomService.addExistCardToRoom(roomId, cardId);
     return new ResponseEntity<>(HttpStatus.OK);
@@ -65,5 +68,12 @@ public class RoomController {
   public ResponseEntity<?> deleteCardFromRoom(@PathVariable String id, @RequestBody Card card) {
     roomService.deleteCardFromRoom(id, card);
     return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @GetMapping("/api/v1/rooms/{cardId}/cards?filterText={filterText}")
+  public ResponseEntity<List<Card>> getRoomCards(
+      @PathVariable String roomId, @PathVariable @Nullable String filterText) {
+    val cards = roomService.getRoomCards(roomId, filterText);
+    return new ResponseEntity<>(cards, HttpStatus.OK);
   }
 }

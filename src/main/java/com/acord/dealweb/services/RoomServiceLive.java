@@ -1,10 +1,14 @@
 package com.acord.dealweb.services;
 
 import com.acord.dealweb.domain.Room;
+import com.acord.dealweb.domain.WebUser;
 import com.acord.dealweb.domain.card.Card;
 import com.acord.dealweb.repositories.CardRepository;
 import com.acord.dealweb.repositories.RoomRepository;
 import java.util.List;
+
+import com.acord.dealweb.repositories.UserRepository;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +16,14 @@ import org.springframework.stereotype.Service;
 public class RoomServiceLive implements RoomService {
   private final RoomRepository roomRepository;
   private final CardRepository cardRepository;
+  private final UserRepository userRepository;
 
   @Autowired
-  public RoomServiceLive(RoomRepository roomRepository, CardRepository cardRepository) {
+  public RoomServiceLive(
+      RoomRepository roomRepository, CardRepository cardRepository, UserRepository userRepository) {
     this.roomRepository = roomRepository;
     this.cardRepository = cardRepository;
+    this.userRepository = userRepository;
   }
 
   @Override
@@ -33,7 +40,7 @@ public class RoomServiceLive implements RoomService {
 
   @Override
   public void addExistCardToRoom(String roomId, String cardId) {
-    Room room = roomRepository.findById(roomId).orElseGet(null);
+    Room room = roomRepository.findById(roomId).orElse(null);
     Card card = cardRepository.getReferenceById(cardId);
     room.addCardToRoom(card); // TODO: add check on null
     addOrUpdate(room);
@@ -84,5 +91,17 @@ public class RoomServiceLive implements RoomService {
     } else {
       return roomRepository.getCardsByRoomId(roomId, filterText);
     }
+  }
+
+  @Override
+  public List<WebUser> getUsersInRoom(String roomId) {
+    return roomRepository.getUsersByRoomId(roomId).stream()
+        .map(userRepository::findByUsername)
+        .toList();
+  }
+
+  @Override
+  public Room getRoomByCardId(String cardId) {
+    return roomRepository.getRoomByCardId(cardId);
   }
 }

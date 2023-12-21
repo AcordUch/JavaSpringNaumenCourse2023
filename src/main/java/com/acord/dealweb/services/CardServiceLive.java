@@ -21,7 +21,7 @@ public class CardServiceLive implements CardService {
 
   @Override
   public Card get(String id) {
-    return cardRepository.getReferenceById(id);
+    return cardRepository.findById(id).orElse(null);
   }
 
   @Override

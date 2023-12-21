@@ -2,10 +2,11 @@ package com.acord.dealweb.view;
 
 import com.acord.dealweb.controllers.UserController;
 import com.acord.dealweb.domain.UserFriend;
-import com.acord.dealweb.view.form.FriendsAddingForm;
+import com.acord.dealweb.view.form.creating.FriendsCreatingForm;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -19,10 +20,11 @@ import lombok.val;
 @Route(value = "/friends", layout = MainLayout.class)
 @PageTitle("Friends")
 public class FriendsView extends VerticalLayout {
+  private final Span VIEW_NAME = new Span("Friends");
   private final Grid<UserFriend> grid = new Grid<>(UserFriend.class);
   private final TextField filterText = new TextField();
 
-  private final FriendsAddingForm friendsAddingForm;
+  private final FriendsCreatingForm friendsCreatingForm;
   private final UserController userController;
 
   public FriendsView(UserController userController) {
@@ -30,7 +32,7 @@ public class FriendsView extends VerticalLayout {
     setSizeFull();
     configureGrid();
 
-    this.friendsAddingForm = new FriendsAddingForm();
+    this.friendsCreatingForm = new FriendsCreatingForm();
     configureForm();
 
     add(makeToolbar(), makeContent());
@@ -57,30 +59,30 @@ public class FriendsView extends VerticalLayout {
     Button reloadButton = new Button("Reload");
     reloadButton.addClickListener(click -> updateGrid());
 
-    return new HorizontalLayout(filterText, addRoomButton, reloadButton);
+    return new HorizontalLayout(VIEW_NAME, filterText, addRoomButton, reloadButton);
   }
 
   private Component makeContent() {
-    HorizontalLayout content = new HorizontalLayout(grid, friendsAddingForm);
+    HorizontalLayout content = new HorizontalLayout(grid, friendsCreatingForm);
     content.setFlexGrow(2, grid);
-    content.setFlexGrow(1, friendsAddingForm);
+    content.setFlexGrow(1, friendsCreatingForm);
     content.setSizeFull();
     return content;
   }
 
   private void configureForm() {
-    friendsAddingForm.setWidth("25em");
-    friendsAddingForm.addSaveListener(this::saveFriend);
-    friendsAddingForm.addDeleteListener(this::deleteFriend);
+    friendsCreatingForm.setWidth("25em");
+    friendsCreatingForm.addSaveListener(this::saveFriend);
+    friendsCreatingForm.addDeleteListener(this::deleteFriend);
   }
 
-  private void saveFriend(FriendsAddingForm.AddFriendEvent event) {
+  private void saveFriend(FriendsCreatingForm.AddFriendEvent event) {
     val friend = event.getUserFriend();
     userController.addFriendToUser(friend.getUsername(), null);
     updateGrid();
   }
 
-  private void deleteFriend(FriendsAddingForm.DeleteFriendEvent event) {
+  private void deleteFriend(FriendsCreatingForm.DeleteFriendEvent event) {
     userController.removeFriendsFromUser(event.getUserFriend().getUsername(), null);
     updateGrid();
     closeEditor();
@@ -95,15 +97,15 @@ public class FriendsView extends VerticalLayout {
     if (friend == null) {
       closeEditor();
     } else {
-      friendsAddingForm.setFriend(friend);
-      friendsAddingForm.setVisible(true);
+      friendsCreatingForm.setFriend(friend);
+      friendsCreatingForm.setVisible(true);
     }
-    friendsAddingForm.setVisible(true);
+    friendsCreatingForm.setVisible(true);
   }
 
   private void closeEditor() {
-    friendsAddingForm.setFriend(null);
-    friendsAddingForm.setVisible(false);
+    friendsCreatingForm.setFriend(null);
+    friendsCreatingForm.setVisible(false);
   }
 
   private void updateGrid() {

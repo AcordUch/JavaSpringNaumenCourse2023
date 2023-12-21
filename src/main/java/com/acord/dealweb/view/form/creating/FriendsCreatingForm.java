@@ -1,4 +1,4 @@
-package com.acord.dealweb.view.form;
+package com.acord.dealweb.view.form.creating;
 
 import com.acord.dealweb.domain.UserFriend;
 import com.vaadin.flow.component.ComponentEvent;
@@ -17,14 +17,14 @@ import com.vaadin.flow.data.binder.ValidationResult;
 import lombok.Getter;
 import lombok.val;
 
-public class FriendsAddingForm extends FormLayout {
+public class FriendsCreatingForm extends FormLayout {
   private final TextField username = new TextField("username");
   private final Button addFriendButton = new Button("Add friend");
   private final Button removeFriendButton = new Button("Remove friend");
   private final BeanValidationBinder<UserFriend> binder =
       new BeanValidationBinder<>(UserFriend.class);
 
-  public FriendsAddingForm() {
+  public FriendsCreatingForm() {
     binder.bindInstanceFields(this);
     add(username, createButtonsLayout());
   }
@@ -62,7 +62,7 @@ public class FriendsAddingForm extends FormLayout {
     try {
       val userFriend = new UserFriend();
       binder.writeBean(userFriend);
-      fireEvent(new FriendsAddingForm.AddFriendEvent(this, userFriend));
+      fireEvent(new FriendsCreatingForm.AddFriendEvent(this, userFriend));
       //      showSuccess(userFriend); TODO: не показывать когда не найдено
     } catch (ValidationException ex) {
       showError(ex);
@@ -89,23 +89,23 @@ public class FriendsAddingForm extends FormLayout {
   }
 
   @Getter
-  public abstract static class FriendsAddingFormEvent extends ComponentEvent<FriendsAddingForm> {
+  public abstract static class FriendsAddingFormEvent extends ComponentEvent<FriendsCreatingForm> {
     private UserFriend userFriend;
 
-    protected FriendsAddingFormEvent(FriendsAddingForm source, UserFriend userFriend) {
+    protected FriendsAddingFormEvent(FriendsCreatingForm source, UserFriend userFriend) {
       super(source, false);
       this.userFriend = userFriend;
     }
   }
 
   public static class AddFriendEvent extends FriendsAddingFormEvent {
-    public AddFriendEvent(FriendsAddingForm source, UserFriend userFriend) {
+    public AddFriendEvent(FriendsCreatingForm source, UserFriend userFriend) {
       super(source, userFriend);
     }
   }
 
   public static class DeleteFriendEvent extends FriendsAddingFormEvent {
-    public DeleteFriendEvent(FriendsAddingForm source, UserFriend userFriend) {
+    public DeleteFriendEvent(FriendsCreatingForm source, UserFriend userFriend) {
       super(source, userFriend);
     }
   }

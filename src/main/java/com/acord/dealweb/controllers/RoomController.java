@@ -1,6 +1,7 @@
 package com.acord.dealweb.controllers;
 
 import com.acord.dealweb.domain.Room;
+import com.acord.dealweb.domain.WebUser;
 import com.acord.dealweb.domain.card.Card;
 import com.acord.dealweb.services.RoomService;
 import jakarta.annotation.Nullable;
@@ -47,7 +48,7 @@ public class RoomController {
 
   @DeleteMapping("api/v1/rooms/{id}")
   public ResponseEntity<?> delete(@PathVariable String id) {
-    roomService.delete(id); //TODO: it is wrong, remade
+    roomService.delete(id); // TODO: it is wrong, remade
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
@@ -75,5 +76,15 @@ public class RoomController {
       @PathVariable String roomId, @PathVariable @Nullable String filterText) {
     val cards = roomService.getRoomCards(roomId, filterText);
     return new ResponseEntity<>(cards, HttpStatus.OK);
+  }
+
+  @GetMapping("/api/v1/rooms/{roomId}/users")
+  public ResponseEntity<List<WebUser>> getUsersInRoom(@PathVariable String roomId) {
+    return new ResponseEntity<>(roomService.getUsersInRoom(roomId), HttpStatus.OK);
+  }
+
+  @GetMapping("/api/v1/rooms/card/{cardId}")
+  public ResponseEntity<Room> getRoomByCardId(@PathVariable String cardId) {
+    return new ResponseEntity<>(roomService.getRoomByCardId(cardId), HttpStatus.OK);
   }
 }

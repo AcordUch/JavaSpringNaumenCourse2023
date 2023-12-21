@@ -1,4 +1,4 @@
-package com.acord.dealweb.view.form;
+package com.acord.dealweb.view.form.creating;
 
 import com.acord.dealweb.domain.Room;
 import com.vaadin.flow.component.ComponentEvent;
@@ -14,7 +14,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import lombok.Getter;
 
-public class RoomForm extends FormLayout {
+public class RoomCreatingForm extends FormLayout {
   private final TextField name = new TextField("Name");
   private final PasswordField password = new PasswordField("Password");
 
@@ -25,7 +25,7 @@ public class RoomForm extends FormLayout {
 
   private final BeanValidationBinder<Room> binder = new BeanValidationBinder<>(Room.class);
 
-  public RoomForm() {
+  public RoomCreatingForm() {
     binder.bindInstanceFields(this);
     add(name, password, createButtonsLayout());
   }
@@ -60,35 +60,35 @@ public class RoomForm extends FormLayout {
   }
 
   @Getter
-  public abstract static class RoomFormEvent extends ComponentEvent<RoomForm> {
+  public abstract static class RoomFormEvent extends ComponentEvent<RoomCreatingForm> {
     private Room room;
 
-    protected RoomFormEvent(RoomForm source, Room room) {
+    protected RoomFormEvent(RoomCreatingForm source, Room room) {
       super(source, false);
       this.room = room;
     }
   }
 
   public static class SaveEvent extends RoomFormEvent {
-    public SaveEvent(RoomForm source, Room room) {
+    public SaveEvent(RoomCreatingForm source, Room room) {
       super(source, room);
     }
   }
 
   public static class DeleteEvent extends RoomFormEvent {
-    public DeleteEvent(RoomForm source, Room room) {
+    public DeleteEvent(RoomCreatingForm source, Room room) {
       super(source, room);
     }
   }
 
   public static class CloseEvent extends RoomFormEvent {
-    public CloseEvent(RoomForm source) {
+    public CloseEvent(RoomCreatingForm source) {
       super(source, null);
     }
   }
 
   public static class OpenEvent extends RoomFormEvent {
-    public OpenEvent(RoomForm source, Room room) {
+    public OpenEvent(RoomCreatingForm source, Room room) {
       super(source, room);
     }
   }

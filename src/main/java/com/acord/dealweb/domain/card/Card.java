@@ -4,7 +4,10 @@ import com.acord.dealweb.domain.CardType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalTime;
+import java.util.UUID;
+
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 
@@ -18,24 +21,36 @@ import org.hibernate.annotations.Cascade;
 @Builder
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Card {
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  private String id;
+  @Id private String id = UUID.randomUUID().toString();
 
   private String name;
   private String description;
+  private int goal;
 
   @Column(nullable = false)
   private final CardType type = CardType.Accumulate;
 
   @Column(nullable = false)
-  private LocalTime fromTime = LocalTime.now();
+  private Instant fromTime = Instant.now();
 
   @Column(nullable = false)
-  private LocalTime toTime = LocalTime.now().plus(Duration.ofHours(1));
+  private Instant toTime = Instant.now().plus(Duration.ofHours(1));
 
-  @OneToOne(fetch=FetchType.EAGER)
+  @OneToOne(fetch = FetchType.EAGER)
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   @PrimaryKeyJoinColumn()
-  private CardAccumulate accumulate = new CardAccumulate();
+  private CardAccumulate accumulate = new CardAccumulate(this.id, this.goal);
+
+  public void setGoal(int goal) {
+    this.goal = goal;
+    accumulate.setGoal(goal);
+  }
+
+  public int getGoal() {
+    return accumulate.getGoal();
+  }
+
+  public void increaseDeposit(String username, int deposit){
+    accumulate.increase(username, deposit);
+  }
 }

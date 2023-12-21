@@ -3,11 +3,12 @@ package com.acord.dealweb.view;
 import com.acord.dealweb.controllers.RoomController;
 import com.acord.dealweb.controllers.UserController;
 import com.acord.dealweb.domain.Room;
-import com.acord.dealweb.view.form.RoomForm;
+import com.acord.dealweb.view.form.creating.RoomCreatingForm;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -21,9 +22,10 @@ import lombok.val;
 @Route(value = "", layout = MainLayout.class)
 @PageTitle("Rooms")
 public class RoomsView extends VerticalLayout {
+  private final Span VIEW_NAME = new Span("Rooms");
   private final Grid<Room> grid = new Grid<>(Room.class);
   private final TextField filterText = new TextField();
-  private final RoomForm form;
+  private final RoomCreatingForm form;
   private final RoomController roomController;
   private final UserController userController;
 
@@ -33,7 +35,7 @@ public class RoomsView extends VerticalLayout {
     setSizeFull();
     configureGrid();
 
-    this.form = new RoomForm();
+    this.form = new RoomCreatingForm();
     configureForm();
 
     add(makeToolbar(), makeContent());
@@ -60,7 +62,7 @@ public class RoomsView extends VerticalLayout {
     Button reloadButton = new Button("Reload");
     reloadButton.addClickListener(click -> updateGrid());
 
-    return new HorizontalLayout(filterText, addRoomButton, reloadButton);
+    return new HorizontalLayout(VIEW_NAME, filterText, addRoomButton, reloadButton);
   }
 
   private Component makeContent() {
@@ -79,7 +81,7 @@ public class RoomsView extends VerticalLayout {
     form.addOpenListener(e -> openRoomView(e.getRoom()));
   }
 
-  private void saveRoom(RoomForm.SaveEvent event) {
+  private void saveRoom(RoomCreatingForm.SaveEvent event) {
     val room = event.getRoom();
     roomController.add(room);
     userController.addExistRoomToUser(null, room.getUuid());
@@ -87,7 +89,7 @@ public class RoomsView extends VerticalLayout {
     closeEditor();
   }
 
-  private void deleteRoom(RoomForm.DeleteEvent event) {
+  private void deleteRoom(RoomCreatingForm.DeleteEvent event) {
     roomController.delete(event.getRoom().getUuid());
     updateGrid();
     closeEditor();

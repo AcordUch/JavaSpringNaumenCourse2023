@@ -22,7 +22,7 @@ public class WebUser {
   private String surname;
   private Role role;
 
-  @OneToMany(fetch = FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.EAGER)
   @CollectionTable(name = "user_rooms", joinColumns = @JoinColumn(name = "user_id"))
   private List<Room> userRooms = new ArrayList<>();
 

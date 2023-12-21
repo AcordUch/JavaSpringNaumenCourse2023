@@ -1,6 +1,7 @@
 package com.acord.dealweb.services;
 
 import com.acord.dealweb.domain.Room;
+import com.acord.dealweb.domain.WebUser;
 import com.acord.dealweb.domain.card.Card;
 import java.util.List;
 
@@ -22,4 +23,8 @@ public interface RoomService {
   void delete(String id);
 
   List<Card> getRoomCards(String roomId, String filterText);
+
+  List<WebUser> getUsersInRoom(String roomId);
+
+  Room getRoomByCardId(String cardId);
 }

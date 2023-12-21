@@ -81,6 +81,7 @@ public class RoomServiceLive implements RoomService {
 
   @Override
   public void delete(String id) {
+    userRepository.deleteRoomFromUsers(id);
     roomRepository.deleteById(id);
   }
 

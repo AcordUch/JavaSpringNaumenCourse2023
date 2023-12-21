@@ -72,6 +72,12 @@ public class UserService implements UserDetailsService {
 
   public void addExistRoomToUser(String username, String roomId) {
     WebUser webUser = userRepository.findByUsername(username);
+    if (!webUser.getUserRooms().stream()
+        .filter(room -> room.getUuid().equals(roomId))
+        .toList()
+        .isEmpty()) {
+      return;
+    }
     Room room = roomRepository.getReferenceById(roomId);
     webUser.addRoomToUser(room);
     update(webUser);
@@ -80,6 +86,12 @@ public class UserService implements UserDetailsService {
   public void deleteRoomFromUser(String username, Room room) { // TODO: rework
     WebUser webUser = userRepository.findByUsername(username);
     webUser.deleteRoomFromUser(room);
+    update(webUser);
+  }
+
+  public void deleteRoomFromUser(String username, String roomId) {
+    WebUser webUser = userRepository.findByUsername(username);
+    webUser.deleteRoomFromUser(roomId);
     update(webUser);
   }
 

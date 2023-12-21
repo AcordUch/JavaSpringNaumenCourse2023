@@ -15,6 +15,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import lombok.val;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @PermitAll
 @Route(value = "/friends", layout = MainLayout.class)
@@ -78,12 +79,17 @@ public class FriendsView extends VerticalLayout {
 
   private void saveFriend(FriendsCreatingForm.AddFriendEvent event) {
     val friend = event.getUserFriend();
-    userController.addFriendToUser(friend.getUsername(), null);
+    val currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+    userController.addFriendToUser(friend.getUsername(), currentUsername);
+    userController.addFriendToUser(currentUsername, friend.getUsername());
     updateGrid();
   }
 
   private void deleteFriend(FriendsCreatingForm.DeleteFriendEvent event) {
-    userController.removeFriendsFromUser(event.getUserFriend().getUsername(), null);
+    val friend = event.getUserFriend();
+    val currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+    userController.removeFriendsFromUser(friend.getUsername(), currentUsername);
+    userController.removeFriendsFromUser(currentUsername, friend.getUsername());
     updateGrid();
     closeEditor();
   }

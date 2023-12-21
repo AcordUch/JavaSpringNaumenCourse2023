@@ -31,10 +31,11 @@ public class CardView extends VerticalLayout implements BeforeEnterObserver {
 
   private final Grid<UserDeposit> usersDepositGrid = new Grid<>(UserDeposit.class);
 
-  private Span goalTextField = new Span("zero");
-  private Span fromTimeTextField = new Span("zero");
-  private Span toTimeTextField = new Span("zero");
-  private Span descriptionTextField = new Span("nope");
+  private final Span goalTextField = new Span("zero");
+  private final Span fromTimeTextField = new Span("zero");
+  private final Span toTimeTextField = new Span("zero");
+  private final Span cardNameTextField = new Span("nope");
+  private final Span descriptionTextField = new Span("nope");
 
   private final DepositAddingForm depositAddingForm;
 
@@ -100,7 +101,7 @@ public class CardView extends VerticalLayout implements BeforeEnterObserver {
   }
 
   private Component makeGoalBar() {
-    return new HorizontalLayout(goalTextField);
+    return new VerticalLayout(cardNameTextField, goalTextField);
   }
 
   private Component makeInfoBar() {
@@ -116,6 +117,7 @@ public class CardView extends VerticalLayout implements BeforeEnterObserver {
   }
 
   private void updateInterface() {
+    cardNameTextField.setText(currentCard.getName());
     goalTextField.setText(String.format("Goal: %s", currentCard.getAccumulate().getGoal()));
     fromTimeTextField.setText(currentCard.getFromTime().toString());
     toTimeTextField.setText(currentCard.getToTime().toString());

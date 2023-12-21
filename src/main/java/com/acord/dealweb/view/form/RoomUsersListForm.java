@@ -27,9 +27,20 @@ public class RoomUsersListForm extends FormLayout {
   @Getter @Setter private WebUser webUser;
 
   public RoomUsersListForm() {
-    add(createAddUserLayout(), usersGrid, createButtonsLayout());
     setupButtons();
     configureGrid();
+
+    add(createForm());
+  }
+
+  private VerticalLayout createForm() {
+    val createUserBar = createAddUserLayout();
+    val buttonBar = createButtonsLayout();
+    val content = new VerticalLayout(createUserBar, usersGrid, buttonBar);
+    content.setFlexGrow(1, createUserBar);
+    content.setFlexGrow(5, usersGrid);
+    content.setFlexGrow(1, buttonBar);
+    return content;
   }
 
   private HorizontalLayout createAddUserLayout() {
@@ -51,7 +62,7 @@ public class RoomUsersListForm extends FormLayout {
   }
 
   private void configureGrid() {
-    usersGrid.setSizeFull();
+    usersGrid.setVisible(true);
     usersGrid.setColumns("username");
     usersGrid.getColumns().forEach(column -> column.setAutoWidth(true));
     usersGrid.addSelectionListener(

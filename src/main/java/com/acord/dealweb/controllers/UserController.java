@@ -49,6 +49,13 @@ public class UserController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  @DeleteMapping("/api/v1/users/room/{roomId}?username={username}")
+  public ResponseEntity<?> deleteRoomFromUser(
+      @PathVariable String roomId, @PathVariable String username) {
+    userService.deleteRoomFromUser(username, roomId);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
   /**
    * @param username in null case taken from security context
    * @param filterText fiter by room name

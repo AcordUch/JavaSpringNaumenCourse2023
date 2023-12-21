@@ -38,6 +38,10 @@ public class WebUser {
     userRooms.remove(room);
   }
 
+  public void deleteRoomFromUser(String roomId) {
+    userRooms.removeIf(room -> room.getUuid().equals(roomId));
+  }
+
   public void addFriend(WebUser friend) {
     friends.add(friend);
   }

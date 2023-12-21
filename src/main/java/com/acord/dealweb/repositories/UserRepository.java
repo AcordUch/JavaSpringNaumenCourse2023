@@ -3,7 +3,10 @@ package com.acord.dealweb.repositories;
 import com.acord.dealweb.domain.Room;
 import com.acord.dealweb.domain.WebUser;
 import java.util.List;
+
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<WebUser, String> {
@@ -26,4 +29,11 @@ public interface UserRepository extends JpaRepository<WebUser, String> {
 
   @Query("select ufr from WebUser u join u.friends ufr where u.username=:username")
   List<WebUser> getFriendsByUsername(String username);
+
+  @Modifying
+  @Transactional
+  @Query(
+      value = "delete from user_rooms as ur where ur.user_rooms_uuid=:roomId",
+      nativeQuery = true)
+  void deleteRoomFromUsers(String roomId);
 }

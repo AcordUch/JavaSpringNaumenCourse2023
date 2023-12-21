@@ -20,6 +20,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.*;
 import jakarta.annotation.security.PermitAll;
 import lombok.val;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 
@@ -64,6 +65,7 @@ public class RoomView extends VerticalLayout implements BeforeEnterObserver {
             .flatMap(roomId -> roomController.getOne(roomId).getBody())
             .orElseGet(Room::new);
     updateGrid();
+    roomUsersListForm.updateGrid(getUsersForList());
   }
 
   private void configureGrid() {
@@ -147,11 +149,26 @@ public class RoomView extends VerticalLayout implements BeforeEnterObserver {
   }
 
   private void addUser(RoomUsersListForm.AddEvent event) {
+    if (SecurityContextHolder.getContext()
+        .getAuthentication()
+        .getName()
+        .equals(event.getUsername())) {
+      return;
+    }
     userController.addRoomToUser(event.getUsername(), currentRoom);
     roomUsersListForm.updateGrid(getUsersForList());
   }
 
-  private void removeUser(RoomUsersListForm.RemoveEvent event) {}
+  private void removeUser(RoomUsersListForm.RemoveEvent event) {
+    if (SecurityContextHolder.getContext()
+        .getAuthentication()
+        .getName()
+        .equals(event.getWebUser().getUsername())) {
+      return;
+    }
+    userController.deleteRoomFromUser(currentRoom.getUuid(), event.getWebUser().getUsername());
+    roomUsersListForm.updateGrid(getUsersForList());
+  }
 
   private void updateGrid() {
     grid.setItems(

@@ -22,14 +22,6 @@ public interface RoomRepository extends JpaRepository<Room, String> {
   @Query("select rc from Room r join r.cardsInRoom rc where r.uuid=:uuid")
   List<Card> getCardsByRoomId(String uuid);
 
-  //  @Query(
-  //      value =
-  //          "select u.role, u.first_name, u.password, u.surname, u.username "
-  //              + "from web_users as u "
-  //              + "join user_rooms ur on u.username = ur.user_id "
-  //              + "where ur.user_rooms_uuid=:uuid",
-  //      nativeQuery = true)
-  //  List<WebUser> getUsersByRoomId(String uuid);
   @Query(
       value = "select ur.user_id from user_rooms ur where ur.user_rooms_uuid=:uuid",
       nativeQuery = true)
